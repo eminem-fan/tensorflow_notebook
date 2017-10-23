@@ -1,0 +1,53 @@
+参考来自于 https://github.com/jikexueyuanwiki/tensorflow-zh
+
+简单认识tensorflow是什么？是一个深度学习框架；是一个google的开源库，并且可以在python中直接加载使用；
+第一部分列举了一个简单的tf应用实例，训练一个常见的线性模型。
+
+
+ML的核心点：统计，分类，回归。
+1.设立大概的线性模型，参数可以不精确，但是趋势要明确
+2.设定训练"步长"、"间隔"，给出梯度下降的参考算法
+3.最终得到训练后的参考结果，和实际情况对比，观察能否反映出线性模型的后续结果。
+
+
+安装流程参考：http://blog.csdn.net/u010099080/article/details/53418159
+tf的安装准备及后续：(以windows环境下为例)
+1.安装准备，官网下载3.6.x版本的python，傻瓜操作完成python的安装，添加系统环境变量，测试python环境是否已建立。(tensorflow-1.2以后已经开始支持python3.6)
+https://www.python.org/downloads/release/
+
+2.python3已经自带pip3，只需要升级一下版本即可。(pip版本 >= 8.1)
+参考命令：
+pip3 -V  查看pip版本号
+python -m pip install -U pip
+python3 -m pip install --upgrade pip  命令更新
+python3 -m pip install --upgrade pip --force-reinstall  强制更新
+
+3.利用pip3安装tf，命令参考如下(可能因为网络不稳定失败几次，反复重装直到完成)
+# GPU版本
+pip3 install --upgrade tensorflow-gpu
+# CPU版本
+pip3 install --upgrade tensorflow
+PS：关于win IDE的推荐，因为主要是以python为主，除了vs以外可以尝试pycharm，也是功能很全面的一个IDE。
+
+(以下只适用于想要尝试GPU安装的所需步骤)
+4.下载CUDA 8.0 和 cuDNN 5.1的安装包
+网盘三方下载：https://zhuanlan.zhihu.com/p/27901356
+官网下载：
+https://developer.nvidia.com/cudnn
+https://developer.nvidia.com/cuda-downloads
+官网归档下载：
+https://developer.nvidia.com/cuda-toolkit-archive
+https://developer.nvidia.com/rdp/cudnn-archive
+https://devtalk.nvidia.com/default/topic/1023497/no-link-to-download-cudnn-v6-or-v6-1/
+
+nvcc -V #查看CUDA版本号，确认安装成功
+cuDNN下载即一个压缩包，和其他SDK类似，解压后将目录添加到环境变量中即可。
+
+[Q1]安装流程最后遇到一个问题，出现如下模块加载失败，此类问题一般都是GPU版本安装时，tf和CUDA或者cuDNN的版本不匹配导致，但是我是安装的CPU版本不存在版本不兼容问题，因此推测可能是缺少某些运行库。
+【图】
+最后安装Visual C++ 2015 redistributable运行库解决问题：https://www.microsoft.com/zh-cn/download/details.aspx?id=48145
+(如果电脑已经安装了VS或者pycharm的，一般都已经自动安装了这些运行库)
+
+【图】
+【Finish】
+
