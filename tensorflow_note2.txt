@@ -1,0 +1,56 @@
+【1】基本概念
+1.图	graph    -->	计算的整体系统(由session来执行，op实际处理，输入输出tensor)
+2.会话	session  -->	执行单位
+3.张量	tensor   -->	输入输出
+4.变量	variable -->	控制状态
+5.节点	op	-->		具体处理接口/操作函数
+
+【2】tensorflow coding flow
+[1]构建组织 graph
+[2]利用session执行图中的op操作
+在python中运用tf最终op操作返回的是numpy(科学计算模块)的ndarray对象，c/c++返回的是tensorflow::tensor实例。
+
+==>tf API
+==>Session API
+
+【3】指定CPU或GPU运行，一般情况下tf会自动寻找设备进行计算
+#code
+with tf.Session() as sess:	
+	with tf.device("/gpu:1"):
+	...构建图...
+#code
+
+"tf.device" option：
+"/cpu:0": The CPU of your machine.
+"/gpu:0": The GPU of your machine, if you have one.
+"/gpu:1": The second GPU of your machine, etc.
+
+【4】Ipython交互环境的易用性(类名一定要注意大小写)
+"InteractiveSession"替换"Session"类；
+"tf.Operation.run()" and "Tensor.eval()"替换"Session.run()方法"
+
+【5】Tensor 类
+1.一个Tensor能够作为一个"输入"来传递给其他的操作(Operation)，由此构造了一个连接不同操作的数据流，使得TensorFLow能够执行一个表示很大，多步骤计算的图。 
+2.在图被"投放"进一个Session中后，Tensor的值能够通过把Tensor传到Seesion.run()里去得到结果。相同的，也可以用t.eval()这个函数，其中的t就是你当前使用的"tensor"(可以使Tensor的子类)，这个函数可以算是tf.get_default_session().run(t)的简便写法。
+
+一个tensor包含一个静态类型Rank；一个shape(维度)和 Type(数据类型)。
+参考打印实例example_3，可以看到图中用静态变量构建后，在进行sess.run()或t.eval()之前打印得到的是constant()构建的tensor类型信息，执行sess.run()或t.eval()后才显示的是实际的数据。即tensor中并不会存储或计算数据，必须要执行图以后才能打印得到结果(numpy.ndarray类)。
+
+Tensor类 属性：
+device:表示tensor将被产生的设备名称 
+dtype：tensor元素类型 
+graph：这个tensor被哪个图所有 
+name:这个tensor的名称 
+op：产生这个tensor作为输出的操作（Operation） 
+shape：tensor的形状（返回的是tf.TensorShape这个表示tensor形状的类） 
+value_index:表示这个tensor在其操作结果中的索引
+
+Tensor类 函数：
+tf.Tensor.eval()		//计算
+tf.Tensor.consumers()	//返回那些操作(op)使用过这个tensor
+tf.Tensor.get_shape()	//获取tensor的维度/形状，判断两个tensor能否兼容？
+tf.Tensor.set_shape()
+
+【6】Variable 类
+变量 维持着图的状态信息。
+通常会将一个统计模型中的参数表示为一组变量. 例如, 你可以将一个神经网络的权重(每一个权重参数即可以看做是一个维度，因此整个图就是一个多维组成)作为某个变量存储在一个 tensor 中. 在训练过程中, 通过重复运行训练图, 更新这个tensor。
