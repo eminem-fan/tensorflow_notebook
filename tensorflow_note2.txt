@@ -49,8 +49,67 @@ Tensor类 函数：
 tf.Tensor.eval()		//计算
 tf.Tensor.consumers()	//返回那些操作(op)使用过这个tensor
 tf.Tensor.get_shape()	//获取tensor的维度/形状，判断两个tensor能否兼容？
-tf.Tensor.set_shape()
+tf.Tensor.set_shape()	//根据要求设定tensor的维度/形状
 
 【6】Variable 类
 变量 维持着图的状态信息。
 通常会将一个统计模型中的参数表示为一组变量. 例如, 你可以将一个神经网络的权重(每一个权重参数即可以看做是一个维度，因此整个图就是一个多维组成)作为某个变量存储在一个 tensor 中. 在训练过程中, 通过重复运行训练图, 更新这个tensor。
+
+变量不作操作直接打印得到的Variable类型信息，如果需要读取对应变量数据，必须要经过初始化，并且在Session环境中进行sess.run()-->print()或计算t.eval()才能得到。
+即两种实现方式：
+[1]
+...
+with tf.Session() as sess:
+	sess.run(tf.global_variables_initializer())
+	result = sess.run(variable_xxx)
+	print(result)
+...
+
+[2]
+...
+with tf.Session() as sess:
+	variable_xxx.initializer.run()
+	print(variable_xxx.eval())
+...
+
+如果没有在session定义，或者没有在with tf.Session ...语句块中执行，会提示没有可用的注册会话，按照提示定义session即可。
+No default session is registered. Use `with sess.as_default()` or pass an explicit session to `eval(session=sess)`
+
+Variable类 属性：
+device:这个变量的device
+dtype:变量的元素类型
+graph:存放变量的图
+initial_value:这个变量的初始值
+initializer :这个变量的初始化器
+name:这个变量的名字
+**op：**The Operation of this variable.
+
+Variable类 相关函数：
+_init_()
+assign()
+assign_add()
+assign_sub()
+count_up_to(limit)
+eval(session=None)
+initialized_value()		//返回初始化定义值
+get_shape()				//获取维度信息
+set_shape()
+load(value, session=None)	//加载新的变量 值，需要指明session环境，即放在session语句块中执行
+read_value()				//返回这个变量的值，在当前的上下文中读取。一般就用于赋值e.g. Vari_A = Vari_b.read_value()
+scatter_sub(sparse_delta, use_locking=False)	//???
+
+tf.global_variables_initializer()	//所有全局变量初始化
+v.initializer.run()					//初始化某一个变量(必须在session环境下)
+
+
+
+
+
+
+
+
+
+
+
+
+
