@@ -86,12 +86,12 @@ name:这个变量的名字
 
 Variable类 相关函数：
 _init_()
-assign()
-assign_add()
-assign_sub()
+assign(ref, value, validate_shape = None, use_locking = None, name = None)	
+assign_add(参数同上)	//加
+assign_sub(参数同上)	//减
 count_up_to(limit)
-eval(session=None)
-initialized_value()		//返回初始化定义值
+eval(session=None)		//计算
+initialized_value()		//返回初始化定义值，常用在变量值调用处
 get_shape()				//获取维度信息
 set_shape()
 load(value, session=None)	//加载新的变量 值，需要指明session环境，即放在session语句块中执行

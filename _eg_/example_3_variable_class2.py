@@ -17,7 +17,9 @@ with tf.Session() as sess:
 	print(a.get_shape())
 	print(a.initialized_value())	#返回初始变量值
 	print(a.eval())
-	print(a.assign_add([1,1], use_locking=True))
+	print(a.assign_add(a, [1,1]))
+	print(a.eval())
+	print(a.assign_sub(a, [3,3]))
 	print(a.eval())
 #	print(a.assign_sub(2, use_locking=True))
 #	print(a.eval())
@@ -28,3 +30,4 @@ with tf.Session() as sess:
 #	print(result)
 
 #	b.read_value()
+
